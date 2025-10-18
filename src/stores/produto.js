@@ -1,40 +1,28 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const API_BASE_URL = 'http://localhost:8080/api'
+// Configure axios defaults
+axios.defaults.baseURL = '/api'
 
 export const useProdutoStore = defineStore('produto', {
   state: () => ({
     produtos: [],
     produto: null,
     loading: false,
-    error: null,
-    token: localStorage.getItem('token') || null
+    error: null
   }),
 
   getters: {
-    isAuthenticated: (state) => !!state.token,
     getProdutoById: (state) => (id) => state.produtos.find(p => p.id === id)
   },
 
   actions: {
-    setToken(token) {
-      this.token = token
-      localStorage.setItem('token', token)
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    },
-
-    clearToken() {
-      this.token = null
-      localStorage.removeItem('token')
-      delete axios.defaults.headers.common['Authorization']
-    },
 
     async fetchProdutos() {
       this.loading = true
       this.error = null
       try {
-        const response = await axios.get(`${API_BASE_URL}/produtos`)
+        const response = await axios.get('/produtos')
         this.produtos = response.data
       } catch (error) {
         this.error = error.response?.data?.message || 'Erro ao buscar produtos'
@@ -48,7 +36,7 @@ export const useProdutoStore = defineStore('produto', {
       this.loading = true
       this.error = null
       try {
-        const response = await axios.get(`${API_BASE_URL}/produtos/${id}`)
+        const response = await axios.get(`/produtos/${id}`)
         this.produto = response.data
         return response.data
       } catch (error) {
@@ -64,7 +52,7 @@ export const useProdutoStore = defineStore('produto', {
       this.loading = true
       this.error = null
       try {
-        const response = await axios.post(`${API_BASE_URL}/produtos`, produtoData)
+        const response = await axios.post('/produtos', produtoData)
         this.produtos.push(response.data)
         return response.data
       } catch (error) {
@@ -80,7 +68,7 @@ export const useProdutoStore = defineStore('produto', {
       this.loading = true
       this.error = null
       try {
-        const response = await axios.put(`${API_BASE_URL}/produtos/${id}`, produtoData)
+        const response = await axios.put(`/produtos/${id}`, produtoData)
         const index = this.produtos.findIndex(p => p.id === id)
         if (index !== -1) {
           this.produtos[index] = response.data
@@ -99,7 +87,7 @@ export const useProdutoStore = defineStore('produto', {
       this.loading = true
       this.error = null
       try {
-        await axios.delete(`${API_BASE_URL}/produtos/${id}/hard`)
+        await axios.delete(`/produtos/${id}/hard`)
         this.produtos = this.produtos.filter(p => p.id !== id)
       } catch (error) {
         this.error = error.response?.data?.message || 'Erro ao deletar produto'
