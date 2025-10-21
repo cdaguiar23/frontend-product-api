@@ -1,11 +1,24 @@
 <template>
   <div class="container mt-4">
+    <div class="alert alert-success mb-4" role="alert">
+      <h4 class="alert-heading">Bem-vindo, {{ authStore.username }}!</h4>
+      <p>Você está logado no sistema de gerenciamento de produtos.</p>
+    </div>
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1>Produtos</h1>
       <div>
         <button @click="logout" class="btn btn-outline-secondary me-2">Sair</button>
         <router-link to="/produtos/novo" class="btn btn-primary">Novo Produto</router-link>
       </div>
+    </div>
+
+    <div class="mb-4">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Pesquisar produtos por nome..."
+        v-model="searchQuery"
+      />
     </div>
 
     <div v-if="produtoStore.loading" class="text-center">
@@ -19,7 +32,7 @@
     </div>
 
     <div v-else class="row">
-      <div v-for="produto in produtoStore.produtos" :key="produto.id" class="col-md-4 mb-4">
+      <div v-for="produto in filteredProdutos" :key="produto.id" class="col-md-4 mb-4">
         <div class="card h-100">
           <div class="card-body">
             <h5 class="card-title">{{ produto.nome }}</h5>
@@ -58,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProdutoStore } from '../stores/produto'
 import { useAuthStore } from '../stores/auth'
@@ -68,9 +81,19 @@ const produtoStore = useProdutoStore()
 const authStore = useAuthStore()
 
 const produtoToDelete = ref(null)
+const searchQuery = ref('')
 
 onMounted(() => {
   produtoStore.fetchProdutos()
+})
+
+const filteredProdutos = computed(() => {
+  if (!searchQuery.value) {
+    return produtoStore.produtos
+  }
+  return produtoStore.produtos.filter(produto =>
+    produto.nome.toLowerCase().startsWith(searchQuery.value.toLowerCase())
+  )
 })
 
 const logout = () => {
