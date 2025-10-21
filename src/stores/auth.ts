@@ -3,12 +3,22 @@ import axios from 'axios'
 
 const API_BASE_URL = 'http://localhost:8080/api'
 
+interface User {
+  username: string
+  role: string
+}
+
+interface Credentials {
+  username: string
+  password: string
+}
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null,
+    user: null as User | null,
     token: localStorage.getItem('token') || null,
     loading: false,
-    error: null
+    error: null as string | null
   }),
 
   getters: {
@@ -18,7 +28,7 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    async login(credentials) {
+    async login(credentials: Credentials) {
       this.loading = true
       this.error = null
       try {
@@ -32,8 +42,8 @@ export const useAuthStore = defineStore('auth', {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
         return response.data
-      } catch (error) {
-        this.error = error.response?.data?.message || 'Erro no login'
+      } catch (error: unknown) {
+        this.error = (error as any).response?.data?.message || 'Erro no login'
         console.error('Erro no login:', error)
         throw error
       } finally {
