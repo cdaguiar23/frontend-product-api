@@ -1,7 +1,7 @@
 <template>
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
+  <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
+    <div class="row justify-content-center w-100">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
         <div class="card">
           <div class="card-header">
             <h3 class="text-center">Login</h3>
@@ -40,6 +40,9 @@
                 Entrar
               </button>
             </form>
+            <div class="text-center mt-3">
+              <router-link to="/register" class="btn btn-link">Criar novo usuário</router-link>
+            </div>
           </div>
         </div>
       </div>
