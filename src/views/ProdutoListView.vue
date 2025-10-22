@@ -75,6 +75,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProdutoStore } from '../stores/produto'
 import { useAuthStore } from '../stores/auth'
+import * as bootstrap from 'bootstrap'
 
 const router = useRouter()
 const produtoStore = useProdutoStore()
