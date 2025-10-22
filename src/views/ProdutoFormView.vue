@@ -113,7 +113,7 @@ const handleSubmit = async () => {
     } else {
       await produtoStore.createProduto(form.value)
     }
-    router.push('/')
+    router.push('/produtos')
   } catch (error) {
     // Error is handled in the store
   }
