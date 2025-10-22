@@ -66,7 +66,7 @@ const credentials = ref({
 const handleLogin = async () => {
   try {
     await authStore.login(credentials.value)
-    router.push('/')
+    router.push('/produtos')
   } catch (error) {
     // Error is handled in the store
   }

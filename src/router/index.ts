@@ -9,10 +9,14 @@ import ProdutoDetailView from '../views/ProdutoDetailView.vue'
 
 const routes = [
   {
-    path: '/login',
+    path: '/',
     name: 'Login',
     component: LoginView,
     meta: { requiresAuth: false }
+  },
+  {
+    path: '/login',
+    redirect: '/'
   },
   {
     path: '/register',
@@ -21,7 +25,7 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
-    path: '/',
+    path: '/produtos',
     name: 'ProdutoList',
     component: ProdutoListView,
     meta: { requiresAuth: true }
@@ -57,8 +61,6 @@ router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore()
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next('/login')
-  } else if (to.name === 'Login' && authStore.isAuthenticated) {
     next('/')
   } else {
     next()
