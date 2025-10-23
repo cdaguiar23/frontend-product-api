@@ -7,7 +7,7 @@
             <h3>{{ produto.nome }}</h3>
             <div>
               <router-link :to="`/produtos/${produto.id}/editar`" class="btn btn-warning btn-sm me-2">Editar</router-link>
-              <router-link to="/" class="btn btn-secondary btn-sm">Voltar</router-link>
+              <router-link to="/produtos" class="btn btn-secondary btn-sm">Voltar</router-link>
             </div>
           </div>
           <div class="card-body">
